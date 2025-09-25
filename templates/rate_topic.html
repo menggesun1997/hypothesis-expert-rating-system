@@ -1,0 +1,374 @@
+{% extends "base.html" %}
+
+{% block title %}Expert Rating System - {{ topic|title }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-12">
+        <!-- 欢迎与评分指南 -->
+        <div class="card mb-4 shadow-sm border-0">
+            <div class="card-header bg-gradient-primary text-white">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h3 class="mb-0">Welcome to {{ topic|title }} Evaluation</h3>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <div class="thank-you-badge">
+                            <h5 class="mb-1"><i class="fas fa-heart me-2"></i>Thank You!</h5>
+                            <small class="opacity-75">Helping shape the future of LLMs in Scientific Discovery</small>
+                        </div>
+                     <div class="language-toggle mt-3">
+                         <button id="translateBtn" class="btn btn-outline-light btn-sm">
+                             <i class="fas fa-language me-2"></i>
+                             <span id="translateText">
+                                 {% if request.args.get('lang') == 'chinese' %}
+                                     English Display
+                                 {% else %}
+                                     中文显示
+                                 {% endif %}
+                             </span>
+                         </button>
+                     </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <!-- 主题标题 -->
+                <div class="alert alert-light border-primary mb-4">
+                    <h5 class="text-primary mb-2"><i class="fas fa-lightbulb me-2"></i>Research Topic</h5>
+                    <p class="mb-0 fw-bold">{{ topic_descriptions[topic] }}</p>
+                </div>
+                
+                <div class="alert alert-info">
+                    <h5><i class="fas fa-graduation-cap me-2"></i>Evaluation Guidelines</h5>
+                    <p>Please evaluate the hypotheses based on the following 5 dimensions:</p>
+                    <ul class="mb-0">
+                        <li><strong>Novelty/Originality</strong>: Which proposal presents a more surprising, non-obvious, or groundbreaking idea?</li>
+                        <li><strong>Soundness/Rationality</strong>: Which proposal is more theoretically and logically sound? Consider the clarity of the writing as a prerequisite for soundness. Which one is built on more solid assumptions?</li>
+                        <li><strong>Feasibility</strong>: Which proposal has a more practical and scientifically valid experiment plan? Which one is more likely to be successfully executed in a real-world setting?</li>
+                        <li><strong>Significance/Impact</strong>: If successful, which idea would have a more profound and lasting influence on the field? Which one tackles a more important problem?</li>
+                        <li><strong>Overall Winner</strong>: After weighing your judgments across all four dimensions, make a holistic decision and declare an overall winner.</li>
+                    </ul>
+                </div>
+                
+                <div class="alert alert-warning">
+                    <strong><i class="fas fa-clock me-2"></i>Session Information:</strong> This evaluation includes {{ total_comparisons }} comparisons and should take about 5-7 minutes to complete.
+                </div>
+            </div>
+        </div>
+
+        <!-- 进度条 -->
+        <div class="card mb-4 shadow-sm border-0">
+            <div class="card-body">
+                <div class="progress mb-3" style="height: 30px;">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" 
+                         style="width: {{ (current_comparison / total_comparisons * 100) }}%"
+                         aria-valuenow="{{ current_comparison }}" 
+                         aria-valuemin="0" 
+                         aria-valuemax="{{ total_comparisons }}">
+                        <span class="fw-bold">{{ (current_comparison / total_comparisons * 100) | round(1) }}%</span>
+                    </div>
+                </div>
+                <p class="text-center mb-0 fs-5">
+                    <strong><i class="fas fa-list-ol me-2"></i>Comparison {{ current_comparison }} of {{ total_comparisons }}</strong>
+                </p>
+            </div>
+        </div>
+
+        <!-- 比较区 -->
+        <div class="card mb-4 shadow-sm border-0">
+            <div class="card-header bg-gradient-info text-white">
+                <h4 class="text-center mb-0"><i class="fas fa-balance-scale me-2"></i>Hypothesis Comparison</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <!-- 假设A -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100 border-primary">
+                            <div class="card-header bg-primary text-white">
+                                <h5 class="mb-0"><i class="fas fa-flask me-2"></i>Hypothesis A</h5>
+                            </div>
+                            <div class="card-body">
+                    <div class="hypothesis-content">
+                        <h6 class="fw-bold text-primary mb-3 translate-content">{{ comparison_data.hypothesis_A.content.title }}</h6>
+                                    
+                                    <div class="mb-4">
+                                        <h6 class="text-primary mb-3 fw-bold"><i class="fas fa-question-circle me-2"></i>Problem Statement</h6>
+                                        <div class="p-3 bg-light rounded">
+                                            <p class="mb-0">{{ comparison_data.hypothesis_A.content.Problem_Statement }}</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-4">
+                                        <h6 class="text-primary mb-3 fw-bold"><i class="fas fa-lightbulb me-2"></i>Motivation</h6>
+                                        <div class="p-3 bg-light rounded">
+                                            <p class="mb-0">{{ comparison_data.hypothesis_A.content.Motivation }}</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-4">
+                                        <h6 class="text-primary mb-3 fw-bold"><i class="fas fa-cogs me-2"></i>Proposed Method</h6>
+                                        <div class="p-3 bg-light rounded">
+                                            <p class="mb-0">{{ comparison_data.hypothesis_A.content.Proposed_Method }}</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-4">
+                                        <h6 class="text-primary mb-3 fw-bold"><i class="fas fa-list-ol me-2"></i>Experiment Plan</h6>
+                                        <div class="p-3 bg-light rounded">
+                                            <p class="mb-0">{{ comparison_data.hypothesis_A.content.Step_by_Step_Experiment_Plan }}</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-4">
+                                        <h6 class="text-primary mb-3 fw-bold"><i class="fas fa-vial me-2"></i>Test Cases</h6>
+                                        <div class="p-3 bg-light rounded">
+                                            <p class="mb-0">{{ comparison_data.hypothesis_A.content.Test_Case_Examples }}</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-4">
+                                        <h6 class="text-primary mb-3 fw-bold"><i class="fas fa-shield-alt me-2"></i>Fallback Plan</h6>
+                                        <div class="p-3 bg-light rounded">
+                                            <p class="mb-0">{{ comparison_data.hypothesis_A.content.Fallback_Plan }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 假设B -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100 border-success">
+                            <div class="card-header bg-success text-white">
+                                <h5 class="mb-0"><i class="fas fa-flask me-2"></i>Hypothesis B</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="hypothesis-content">
+                                    <h6 class="fw-bold text-success mb-3">{{ comparison_data.hypothesis_B.content.title }}</h6>
+                                    
+                                    <div class="mb-4">
+                                        <h6 class="text-success mb-3 fw-bold"><i class="fas fa-question-circle me-2"></i>Problem Statement</h6>
+                                        <div class="p-3 bg-light rounded">
+                                            <p class="mb-0">{{ comparison_data.hypothesis_B.content.Problem_Statement }}</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-4">
+                                        <h6 class="text-success mb-3 fw-bold"><i class="fas fa-lightbulb me-2"></i>Motivation</h6>
+                                        <div class="p-3 bg-light rounded">
+                                            <p class="mb-0">{{ comparison_data.hypothesis_B.content.Motivation }}</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-4">
+                                        <h6 class="text-success mb-3 fw-bold"><i class="fas fa-cogs me-2"></i>Proposed Method</h6>
+                                        <div class="p-3 bg-light rounded">
+                                            <p class="mb-0">{{ comparison_data.hypothesis_B.content.Proposed_Method }}</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-4">
+                                        <h6 class="text-success mb-3 fw-bold"><i class="fas fa-list-ol me-2"></i>Experiment Plan</h6>
+                                        <div class="p-3 bg-light rounded">
+                                            <p class="mb-0">{{ comparison_data.hypothesis_B.content.Step_by_Step_Experiment_Plan }}</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-4">
+                                        <h6 class="text-success mb-3 fw-bold"><i class="fas fa-vial me-2"></i>Test Cases</h6>
+                                        <div class="p-3 bg-light rounded">
+                                            <p class="mb-0">{{ comparison_data.hypothesis_B.content.Test_Case_Examples }}</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-4">
+                                        <h6 class="text-success mb-3 fw-bold"><i class="fas fa-shield-alt me-2"></i>Fallback Plan</h6>
+                                        <div class="p-3 bg-light rounded">
+                                            <p class="mb-0">{{ comparison_data.hypothesis_B.content.Fallback_Plan }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 评分区 -->
+        <div class="card mb-4 shadow-sm border-0">
+            <div class="card-header bg-gradient-warning text-dark">
+                <h4 class="text-center mb-0"><i class="fas fa-star me-2"></i>Evaluation Dimensions</h4>
+            </div>
+            <div class="card-body">
+                <form id="rating-form">
+                    <input type="hidden" name="comparison_number" value="{{ current_comparison }}">
+                    <input type="hidden" name="hypothesis_A_id" value="{{ comparison_data.hypothesis_A.id }}">
+                    <input type="hidden" name="hypothesis_B_id" value="{{ comparison_data.hypothesis_B.id }}">
+                    
+                    <!-- 评分维度 - 5行显示 -->
+                    <!-- 新颖性评分 -->
+                    <div class="mb-4">
+                        <label class="rating-dimension-label">
+                            <i class="fas fa-lightbulb text-warning me-2"></i>1. Novelty/Originality
+                        </label>
+                        <div class="rating-scale">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="novelty_score" value="1" id="novelty1" required>
+                                <label class="form-check-label" for="novelty1">A is much better</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="novelty_score" value="2" id="novelty2">
+                                <label class="form-check-label" for="novelty2">A is slightly better</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="novelty_score" value="3" id="novelty3">
+                                <label class="form-check-label" for="novelty3">Roughly equal</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="novelty_score" value="4" id="novelty4">
+                                <label class="form-check-label" for="novelty4">B is slightly better</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="novelty_score" value="5" id="novelty5">
+                                <label class="form-check-label" for="novelty5">B is much better</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 合理性评分 -->
+                    <div class="mb-4">
+                        <label class="rating-dimension-label">
+                            <i class="fas fa-brain text-info me-2"></i>2. Soundness/Rationality
+                        </label>
+                        <div class="rating-scale">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="soundness_score" value="1" id="soundness1" required>
+                                <label class="form-check-label" for="soundness1">A is much better</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="soundness_score" value="2" id="soundness2">
+                                <label class="form-check-label" for="soundness2">A is slightly better</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="soundness_score" value="3" id="soundness3">
+                                <label class="form-check-label" for="soundness3">Roughly equal</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="soundness_score" value="4" id="soundness4">
+                                <label class="form-check-label" for="soundness4">B is slightly better</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="soundness_score" value="5" id="soundness5">
+                                <label class="form-check-label" for="soundness5">B is much better</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 可行性评分 -->
+                    <div class="mb-4">
+                        <label class="rating-dimension-label">
+                            <i class="fas fa-tools text-success me-2"></i>3. Feasibility
+                        </label>
+                        <div class="rating-scale">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="feasibility_score" value="1" id="feasibility1" required>
+                                <label class="form-check-label" for="feasibility1">A is much better</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="feasibility_score" value="2" id="feasibility2">
+                                <label class="form-check-label" for="feasibility2">A is slightly better</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="feasibility_score" value="3" id="feasibility3">
+                                <label class="form-check-label" for="feasibility3">Roughly equal</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="feasibility_score" value="4" id="feasibility4">
+                                <label class="form-check-label" for="feasibility4">B is slightly better</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="feasibility_score" value="5" id="feasibility5">
+                                <label class="form-check-label" for="feasibility5">B is much better</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 重要性评分 -->
+                    <div class="mb-4">
+                        <label class="rating-dimension-label">
+                            <i class="fas fa-bullseye text-danger me-2"></i>4. Significance/Impact
+                        </label>
+                        <div class="rating-scale">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="significance_score" value="1" id="significance1" required>
+                                <label class="form-check-label" for="significance1">A is much better</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="significance_score" value="2" id="significance2">
+                                <label class="form-check-label" for="significance2">A is slightly better</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="significance_score" value="3" id="significance3">
+                                <label class="form-check-label" for="significance3">Roughly equal</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="significance_score" value="4" id="significance4">
+                                <label class="form-check-label" for="significance4">B is slightly better</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="significance_score" value="5" id="significance5">
+                                <label class="form-check-label" for="significance5">B is much better</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 总体评分 -->
+                    <div class="mb-4">
+                        <label class="rating-dimension-label">
+                            <i class="fas fa-trophy text-warning me-2"></i>5. Overall Winner
+                        </label>
+                        <div class="rating-scale">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="overall_score" value="1" id="overall1" required>
+                                <label class="form-check-label" for="overall1">A is much better</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="overall_score" value="2" id="overall2">
+                                <label class="form-check-label" for="overall2">A is slightly better</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="overall_score" value="3" id="overall3">
+                                <label class="form-check-label" for="overall3">Roughly equal</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="overall_score" value="4" id="overall4">
+                                <label class="form-check-label" for="overall4">B is slightly better</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="overall_score" value="5" id="overall5">
+                                <label class="form-check-label" for="overall5">B is much better</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 提交按钮 -->
+                    <div class="text-center">
+                        {% if current_comparison < total_comparisons %}
+                        <button type="submit" class="btn btn-primary btn-lg px-5" id="next-btn">
+                            <i class="fas fa-arrow-right me-2"></i>Next Comparison
+                        </button>
+                        {% else %}
+                        <button type="submit" class="btn btn-success btn-lg px-5" id="finish-btn">
+                            <i class="fas fa-check me-2"></i>Complete Evaluation
+                        </button>
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
