@@ -123,7 +123,8 @@ async function handleCommentSubmission(event) {
     
     const formData = new FormData(event.target);
     const commentData = {
-        comment: formData.get('comment')
+        email: formData.get('email') || '',  // 邮箱字段，可选
+        comment: formData.get('comment') || ''
     };
     
     // Show loading state
@@ -154,6 +155,7 @@ async function handleCommentSubmission(event) {
             submitBtn.textContent = 'Submitted';
             submitBtn.disabled = true;
             document.getElementById('comment-text').disabled = true;
+            document.getElementById('email-input').disabled = true;
         } else {
             showError('Failed to submit feedback. Please try again.');
         }

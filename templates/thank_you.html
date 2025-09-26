@@ -32,17 +32,28 @@
                 </div>
                 
                 <div class="alert alert-info">
-                    <h5><i class="fas fa-comment me-2"></i>Optional Feedback</h5>
-                    <p class="mb-0">If you have any additional feedback or comments, please share them in the text box below:</p>
+                    <h5><i class="fas fa-comment me-2"></i>Optional Feedback & Contact Information</h5>
+                    <p class="mb-0">We would greatly appreciate your feedback to help us improve our research. If you'd like to stay updated on our findings or have any comments, please feel free to share them below. Your email address is completely optional and will only be used to send you a summary of our research results if you choose to provide it.</p>
                 </div>
                 
                 <form id="comment-form">
                     <div class="mb-3">
-                        <textarea class="form-control" id="comment-text" name="comment" rows="5" 
-                                  placeholder="Please enter your feedback or comments here..."></textarea>
+                        <label for="email-input" class="form-label">
+                            <i class="fas fa-envelope me-2"></i>Email Address (Optional)
+                        </label>
+                        <input type="email" class="form-control" id="email-input" name="email" 
+                               placeholder="your.email@example.com">
+                        <div class="form-text">We'll only use this to send you research results if you provide it</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="comment-text" class="form-label">
+                            <i class="fas fa-comment me-2"></i>Comments or Feedback (Optional)
+                        </label>
+                        <textarea class="form-control" id="comment-text" name="comment" rows="4" 
+                                  placeholder="Please share any thoughts, suggestions, or feedback about your evaluation experience..."></textarea>
                     </div>
                     <button type="submit" class="btn btn-primary btn-lg">
-                        <i class="fas fa-paper-plane me-2"></i>Submit Feedback
+                        <i class="fas fa-paper-plane me-2"></i>Submit
                     </button>
                 </form>
                 

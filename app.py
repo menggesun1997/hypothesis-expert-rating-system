@@ -160,6 +160,7 @@ def create_rating_tables():
             comment_id INTEGER PRIMARY KEY AUTOINCREMENT,
             session_id TEXT NOT NULL,
             topic_name TEXT NOT NULL,
+            email TEXT,
             comment_text TEXT,
             timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
@@ -395,11 +396,12 @@ def submit_comment():
     cursor = conn.cursor()
     
     cursor.execute("""
-        INSERT INTO comments (session_id, topic_name, comment_text)
-        VALUES (?, ?, ?)
+        INSERT INTO comments (session_id, topic_name, email, comment_text)
+        VALUES (?, ?, ?, ?)
     """, (
         session['session_id'],
         session['topic'],
+        data.get('email', ''),  # 邮箱字段，可选
         data.get('comment', '')
     ))
     
