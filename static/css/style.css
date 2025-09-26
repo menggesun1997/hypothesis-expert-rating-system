@@ -41,7 +41,7 @@ main {
 .expert-rating-header {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
-    padding: 2rem 0;
+    padding: 1.5rem 0;
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
