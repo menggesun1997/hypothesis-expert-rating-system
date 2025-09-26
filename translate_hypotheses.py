@@ -10,7 +10,7 @@ import os
 from pydantic import BaseModel
 
 # 配置数据库路径
-DB_PATH = "/Users/sunmengge/Dropbox/hypothesis_web_visualize/hypothesis_data.db"
+DB_PATH = "/Users/sunmengge/Dropbox/hypothesis_expert_rating_system/hypothesis_data.db"
 KEYS_PATH = "/Users/sunmengge/Dropbox/idea generation/by_evolution/smg/keys.json"
 
 # 定义翻译结果的数据模型
@@ -77,21 +77,57 @@ def translate_hypothesis_content(content_dict, api_key):
         
         if response.text:
             try:
-                # 清理响应文本，移除可能的代码块标记
-                text = response.text.strip()
-                if text.startswith('```json'):
-                    text = text[7:]  # 移除开头的```json
-                if text.endswith('```'):
-                    text = text[:-3]  # 移除结尾的```
-                text = text.strip()
+                # 使用正则表达式提取JSON内容
+                import re
+                
+                # 查找JSON对象，从第一个{到最后一个}
+                json_match = re.search(r'\{.*\}', response.text, re.DOTALL)
+                if not json_match:
+                    print("警告：未找到JSON格式的内容")
+                    return None
+                
+                text = json_match.group(0)
+                
+                # 简单的文本清理
+                # 移除所有控制字符
+                text = ''.join(char for char in text if ord(char) >= 32 or char in '\n\r\t')
                 
                 # 尝试解析JSON响应
                 translated_data = json.loads(text)
                 return translated_data
+                
             except json.JSONDecodeError as e:
                 print(f"警告：无法解析API返回的JSON格式: {e}")
-                print(f"清理后的内容：{text[:200]}...")
-                return None
+                print(f"原始内容：{response.text[:300]}...")
+                
+                # 尝试手动构建JSON对象
+                try:
+                    # 使用正则表达式提取各个字段
+                    title_match = re.search(r'"title":\s*"([^"]*)"', response.text)
+                    problem_match = re.search(r'"Problem_Statement":\s*"([^"]*)"', response.text)
+                    motivation_match = re.search(r'"Motivation":\s*"([^"]*)"', response.text)
+                    method_match = re.search(r'"Proposed_Method":\s*"([^"]*)"', response.text)
+                    plan_match = re.search(r'"Step_by_Step_Experiment_Plan":\s*"([^"]*)"', response.text)
+                    test_match = re.search(r'"Test_Case_Examples":\s*"([^"]*)"', response.text)
+                    fallback_match = re.search(r'"Fallback_Plan":\s*"([^"]*)"', response.text)
+                    
+                    # 构建翻译结果
+                    translated_data = {
+                        "title": title_match.group(1) if title_match else "",
+                        "Problem_Statement": problem_match.group(1) if problem_match else "",
+                        "Motivation": motivation_match.group(1) if motivation_match else "",
+                        "Proposed_Method": method_match.group(1) if method_match else "",
+                        "Step_by_Step_Experiment_Plan": plan_match.group(1) if plan_match else "",
+                        "Test_Case_Examples": test_match.group(1) if test_match else "",
+                        "Fallback_Plan": fallback_match.group(1) if fallback_match else ""
+                    }
+                    
+                    print("通过正则表达式提取成功解析JSON")
+                    return translated_data
+                    
+                except Exception as e2:
+                    print(f"正则表达式提取也失败: {e2}")
+                    return None
         else:
             print("警告：API返回空响应")
             return None
@@ -115,10 +151,11 @@ def translate_hypotheses():
         conn = sqlite3.connect(DB_PATH)
         cursor = conn.cursor()
         
-        # 获取所有需要翻译的假设（强制重新翻译所有记录）
+        # 获取所有需要翻译的假设（只翻译hypothesis_content_zh为空的记录）
         cursor.execute("""
             SELECT id, topic_name, hypothesis_rank, hypothesis_content_en
             FROM predefined_comparisons 
+            WHERE hypothesis_content_zh IS NULL OR hypothesis_content_zh = ''
             ORDER BY topic_name, hypothesis_rank
         """)
         
