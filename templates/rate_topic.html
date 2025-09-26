@@ -10,49 +10,38 @@
             <div class="card-header bg-gradient-primary text-white">
                 <div class="row align-items-center">
                     <div class="col-md-8">
-                        <h3 class="mb-0">Welcome to {{ topic|title }} Evaluation</h3>
+                        <h3 class="mb-0">Expert Rating System</h3>
+                        <p class="mb-0 mt-2 opacity-75">{{ topic_descriptions[topic] }}</p>
                     </div>
                     <div class="col-md-4 text-end">
                         <div class="thank-you-badge">
                             <h5 class="mb-1"><i class="fas fa-heart me-2"></i>Thank You!</h5>
                             <small class="opacity-75">Helping shape the future of LLMs in Scientific Discovery</small>
                         </div>
-                     <div class="language-toggle mt-3">
-                         <button id="translateBtn" class="btn btn-outline-light btn-sm">
-                             <i class="fas fa-language me-2"></i>
-                             <span id="translateText">
-                                 {% if request.args.get('lang') == 'chinese' %}
-                                     English Display
-                                 {% else %}
-                                     中文显示
-                                 {% endif %}
-                             </span>
-                         </button>
-                     </div>
                     </div>
                 </div>
             </div>
             <div class="card-body">
-                <!-- 主题标题 -->
-                <div class="alert alert-light border-primary mb-4">
-                    <h5 class="text-primary mb-2"><i class="fas fa-lightbulb me-2"></i>Research Topic</h5>
-                    <p class="mb-0 fw-bold">{{ topic_descriptions[topic] }}</p>
-                </div>
                 
-                <div class="alert alert-info">
-                    <h5><i class="fas fa-graduation-cap me-2"></i>Evaluation Guidelines</h5>
-                    <p>Please evaluate the hypotheses based on the following 5 dimensions:</p>
-                    <ul class="mb-0">
-                        <li><strong>Novelty/Originality</strong>: Which proposal presents a more surprising, non-obvious, or groundbreaking idea?</li>
-                        <li><strong>Soundness/Rationality</strong>: Which proposal is more theoretically and logically sound? Consider the clarity of the writing as a prerequisite for soundness. Which one is built on more solid assumptions?</li>
-                        <li><strong>Feasibility</strong>: Which proposal has a more practical and scientifically valid experiment plan? Which one is more likely to be successfully executed in a real-world setting?</li>
-                        <li><strong>Significance/Impact</strong>: If successful, which idea would have a more profound and lasting influence on the field? Which one tackles a more important problem?</li>
-                        <li><strong>Overall Winner</strong>: After weighing your judgments across all four dimensions, make a holistic decision and declare an overall winner.</li>
-                    </ul>
-                </div>
                 
                 <div class="alert alert-warning">
-                    <strong><i class="fas fa-clock me-2"></i>Session Information:</strong> This evaluation includes {{ total_comparisons }} comparisons and should take about 5-7 minutes to complete.
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <strong><i class="fas fa-clock me-2"></i>Session Information:</strong> This evaluation includes {{ total_comparisons }} comparisons and should take about 5-7 minutes to complete.
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <button id="translateBtn" class="btn btn-outline-primary btn-sm">
+                                <i class="fas fa-language me-2"></i>
+                                <span id="translateText">
+                                    {% if request.args.get('lang') == 'chinese' %}
+                                        English Display
+                                    {% else %}
+                                        中文显示
+                                    {% endif %}
+                                </span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -212,7 +201,7 @@
                     <!-- 新颖性评分 -->
                     <div class="mb-4">
                         <label class="rating-dimension-label">
-                            <i class="fas fa-lightbulb text-warning me-2"></i>1. Novelty/Originality
+                            <i class="fas fa-lightbulb text-warning me-2"></i>1. Novelty/Originality: Which proposal presents a more surprising, non-obvious, or groundbreaking idea?
                         </label>
                         <div class="rating-scale">
                             <div class="form-check">
@@ -241,7 +230,7 @@
                     <!-- 合理性评分 -->
                     <div class="mb-4">
                         <label class="rating-dimension-label">
-                            <i class="fas fa-brain text-info me-2"></i>2. Soundness/Rationality
+                            <i class="fas fa-brain text-info me-2"></i>2. Soundness/Rationality: Which proposal is more theoretically and logically sound? Consider the clarity of the writing as a prerequisite for soundness. Which one is built on more solid assumptions?
                         </label>
                         <div class="rating-scale">
                             <div class="form-check">
@@ -270,7 +259,7 @@
                     <!-- 可行性评分 -->
                     <div class="mb-4">
                         <label class="rating-dimension-label">
-                            <i class="fas fa-tools text-success me-2"></i>3. Feasibility
+                            <i class="fas fa-tools text-success me-2"></i>3. Feasibility: Which proposal has a more practical and scientifically valid experiment plan? Which one is more likely to be successfully executed in a real-world setting?
                         </label>
                         <div class="rating-scale">
                             <div class="form-check">
@@ -299,7 +288,7 @@
                     <!-- 重要性评分 -->
                     <div class="mb-4">
                         <label class="rating-dimension-label">
-                            <i class="fas fa-bullseye text-danger me-2"></i>4. Significance/Impact
+                            <i class="fas fa-bullseye text-danger me-2"></i>4. Significance/Impact: If successful, which idea would have a more profound and lasting influence on the field? Which one tackles a more important problem?
                         </label>
                         <div class="rating-scale">
                             <div class="form-check">
@@ -328,7 +317,7 @@
                     <!-- 总体评分 -->
                     <div class="mb-4">
                         <label class="rating-dimension-label">
-                            <i class="fas fa-trophy text-warning me-2"></i>5. Overall Winner
+                            <i class="fas fa-trophy text-warning me-2"></i>5. Overall Winner: After weighing your judgments across all four dimensions, make a holistic decision and declare an overall winner.
                         </label>
                         <div class="rating-scale">
                             <div class="form-check">
