@@ -9,7 +9,7 @@ app = Flask(__name__)
 app.secret_key = 'your-secret-key-here'  # 请在生产环境中更改此密钥
 
 # 数据库路径
-DB_PATH = '../hypothesis_data.db'
+DB_PATH = 'hypothesis_data.db'
 
 # 每个主题的固定假设池（10条假设）
 TOPIC_HYPOTHESIS_POOLS = {}
@@ -434,18 +434,67 @@ def reset_session():
     session.clear()
     return "会话已重置！<br><a href='/'>返回主页</a>"
 
+@app.errorhandler(500)
+def internal_error(error):
+    """处理500内部服务器错误"""
+    import traceback
+    error_info = traceback.format_exc()
+    print(f"❌ 500错误: {error}")
+    print(f"📋 错误详情: {error_info}")
+    return f"""
+    <h1>服务器内部错误</h1>
+    <p>抱歉，服务器遇到了一个内部错误。</p>
+    <p><strong>错误信息:</strong> {error}</p>
+    <p><a href="/">返回主页</a></p>
+    <details>
+        <summary>技术详情</summary>
+        <pre>{error_info}</pre>
+    </details>
+    """, 500
+
+@app.errorhandler(404)
+def not_found_error(error):
+    """处理404错误"""
+    return """
+    <h1>页面未找到</h1>
+    <p>抱歉，您访问的页面不存在。</p>
+    <p><a href="/">返回主页</a></p>
+    """, 404
+
 if __name__ == '__main__':
-    # 初始化假设池和数据库表
-    init_hypothesis_pools()
-    create_rating_tables()
-    
-    # Railway环境变量支持
-    port = int(os.environ.get('PORT', 5001))
-    host = os.environ.get('HOST', '0.0.0.0')
-    debug = os.environ.get('DEBUG', 'False').lower() == 'true'
-    
-    print("🚀 启动专家评分系统...")
-    print("📊 支持多主题假设比较和评分")
-    print(f"🌐 访问地址: http://{host}:{port}")
-    
-    app.run(debug=debug, host=host, port=port)
+    try:
+        # 检查数据库文件是否存在
+        if not os.path.exists(DB_PATH):
+            print(f"❌ 数据库文件不存在: {DB_PATH}")
+            print("📁 当前工作目录:", os.getcwd())
+            print("📁 目录内容:", os.listdir('.'))
+            exit(1)
+        
+        print(f"✅ 数据库文件存在: {DB_PATH}")
+        
+        # 初始化假设池和数据库表
+        print("🔄 初始化假设池...")
+        init_hypothesis_pools()
+        print("✅ 假设池初始化完成")
+        
+        print("🔄 创建评分表...")
+        create_rating_tables()
+        print("✅ 评分表创建完成")
+        
+        # Railway环境变量支持
+        port = int(os.environ.get('PORT', 5001))
+        host = os.environ.get('HOST', '0.0.0.0')
+        debug = os.environ.get('DEBUG', 'False').lower() == 'true'
+        
+        print("🚀 启动专家评分系统...")
+        print("📊 支持多主题假设比较和评分")
+        print(f"🌐 访问地址: http://{host}:{port}")
+        print(f"🔧 调试模式: {debug}")
+        
+        app.run(debug=debug, host=host, port=port)
+        
+    except Exception as e:
+        print(f"❌ 启动失败: {e}")
+        import traceback
+        traceback.print_exc()
+        exit(1)
