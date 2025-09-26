@@ -395,37 +395,230 @@ footer {
 
 /* 响应式调整 */
 @media (max-width: 768px) {
+    /* 主要容器调整 */
     main {
-        margin: 1rem !important;
+        margin: 0.5rem !important;
         padding: 1rem;
         border-radius: 15px;
     }
     
+    .container {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+    }
+    
+    /* 头部区域调整 */
+    .expert-rating-header {
+        padding: 1rem 0;
+    }
+    
+    .expert-rating-header h1 {
+        font-size: 1.8rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .expert-rating-header .subtitle {
+        font-size: 0.9rem;
+    }
+    
     .hero-section {
-        padding: 2rem 0;
-        margin-bottom: 2rem;
+        padding: 1.5rem 0;
+        margin-bottom: 1.5rem;
+    }
+    
+    /* 卡片调整 */
+    .card {
+        margin-bottom: 1rem;
     }
     
     .card-body {
         padding: 1rem;
     }
     
-    .btn-lg {
-        padding: 12px 25px;
-        font-size: 1rem;
+    .card-header {
+        padding: 1rem;
     }
     
+    /* 主题卡片在移动端的特殊调整 */
+    .topic-card .card-body {
+        padding: 1rem 0.8rem;
+    }
+    
+    .topic-description {
+        min-height: auto;
+        padding: 0.5rem 0;
+    }
+    
+    /* 按钮调整 */
+    .btn-lg {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+    
+    .btn {
+        font-size: 0.85rem;
+        padding: 8px 16px;
+    }
+    
+    /* 评分区域调整 */
     .rating-scale {
         margin-left: 0;
         border-left: none;
         border-top: 4px solid var(--primary-color);
-        padding-left: 0;
-        padding-top: 1rem;
+        padding: 1rem 0.5rem;
         margin-top: 1rem;
     }
     
+    .rating-scale .form-check {
+        display: block;
+        margin-right: 0;
+        margin-bottom: 0.5rem;
+        padding: 0.3rem 0.5rem;
+    }
+    
+    .rating-scale .form-check-label {
+        font-size: 0.8rem;
+        white-space: normal;
+        line-height: 1.3;
+    }
+    
+    /* 假设内容调整 */
     .hypothesis-content {
-        max-height: 600px;
+        max-height: 500px;
+        font-size: 0.9rem;
+        line-height: 1.4;
+    }
+    
+    /* 进度条调整 */
+    .progress {
+        height: 25px;
+        margin-bottom: 1rem;
+    }
+    
+    .progress-bar {
+        font-size: 0.8rem;
+    }
+    
+    /* 表格调整 */
+    .table {
+        font-size: 0.8rem;
+    }
+    
+    /* 导航栏调整 */
+    .navbar-brand {
+        font-size: 1.2rem;
+    }
+    
+    /* 统一头部调整 */
+    .unified-header {
+        padding: 1rem;
+    }
+    
+    .unified-header h3 {
+        font-size: 1.3rem;
+    }
+    
+    .unified-header p {
+        font-size: 0.9rem;
+    }
+    
+    /* 感谢徽章调整 */
+    .thank-you-badge {
+        padding: 1rem;
+        margin-top: 1rem;
+    }
+    
+    .thank-you-badge h5 {
+        font-size: 1rem;
+    }
+    
+    .thank-you-badge small {
+        font-size: 0.8rem;
+    }
+    
+    /* 语言切换按钮调整 */
+    .language-toggle .btn {
+        font-size: 0.75rem;
+        padding: 0.4rem 0.8rem;
+        margin: 0.2rem;
+    }
+    
+    /* 评分维度标签调整 */
+    .rating-dimension-label {
+        font-size: 1rem;
+        margin-bottom: 10px;
+    }
+    
+    /* 警告框调整 */
+    .alert {
+        font-size: 0.85rem;
+        padding: 0.8rem;
+    }
+    
+    /* 徽章调整 */
+    .badge {
+        font-size: 0.7rem;
+        padding: 0.3rem 0.6rem;
+    }
+}
+
+/* 超小屏幕调整 (手机竖屏) */
+@media (max-width: 480px) {
+    main {
+        margin: 0.25rem !important;
+        padding: 0.8rem;
+    }
+    
+    .expert-rating-header h1 {
+        font-size: 1.5rem;
+    }
+    
+    .expert-rating-header .subtitle {
+        font-size: 0.8rem;
+    }
+    
+    .card-body {
+        padding: 0.8rem;
+    }
+    
+    .card-header {
+        padding: 0.8rem;
+    }
+    
+    .btn-lg {
+        padding: 8px 16px;
+        font-size: 0.85rem;
+    }
+    
+    .rating-scale {
+        padding: 0.8rem 0.3rem;
+    }
+    
+    .rating-scale .form-check-label {
+        font-size: 0.75rem;
+    }
+    
+    .hypothesis-content {
+        max-height: 400px;
+        font-size: 0.85rem;
+    }
+    
+    .unified-header h3 {
+        font-size: 1.1rem;
+    }
+    
+    .unified-header p {
+        font-size: 0.8rem;
+    }
+    
+    .progress {
+        height: 20px;
+    }
+    
+    .progress-bar {
+        font-size: 0.7rem;
     }
 }
 
