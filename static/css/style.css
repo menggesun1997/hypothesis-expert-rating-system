@@ -25,6 +25,38 @@ main {
     box-shadow: 0 20px 40px rgba(0,0,0,0.1);
 }
 
+/* Expert Rating System Header */
+.expert-rating-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 2rem 0;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.expert-rating-header h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.expert-rating-header .subtitle {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    font-weight: 400;
+}
+
+.expert-rating-header .thank-you-badge {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 1rem;
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+}
+
+.expert-rating-header .thank-you-badge h5 {
+    margin-bottom: 0.25rem;
+    font-weight: 600;
+}
+
 /* 导航栏样式 */
 .navbar.bg-gradient {
     background: linear-gradient(135deg, #495057 0%, #6c757d 100%) !important;
