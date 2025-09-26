@@ -23,6 +23,18 @@ main {
     margin-bottom: 2rem !important;
     padding: 2rem;
     box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    max-width: 1400px;
+}
+
+/* 加宽内容区域 */
+.container {
+    max-width: 1400px;
+}
+
+@media (min-width: 1200px) {
+    .container {
+        max-width: 1400px;
+    }
 }
 
 /* Expert Rating System Header */

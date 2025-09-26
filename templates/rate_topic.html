@@ -5,26 +5,6 @@
 {% block content %}
 <div class="row">
     <div class="col-lg-12">
-        <!-- Session Information -->
-        <div class="alert alert-warning mb-4">
-            <div class="row align-items-center">
-                <div class="col-md-8">
-                    <strong><i class="fas fa-clock me-2"></i>Session Information:</strong> This evaluation includes {{ total_comparisons }} comparisons and should take about 5-7 minutes to complete.
-                </div>
-                <div class="col-md-4 text-end">
-                    <button id="translateBtn" class="btn btn-outline-primary btn-sm">
-                        <i class="fas fa-language me-2"></i>
-                        <span id="translateText">
-                            {% if request.args.get('lang') == 'chinese' %}
-                                English Display
-                            {% else %}
-                                中文显示
-                            {% endif %}
-                        </span>
-                    </button>
-                </div>
-            </div>
-        </div>
 
         <!-- 进度条 -->
         <div class="card mb-4 shadow-sm border-0">
@@ -52,7 +32,7 @@
             <div class="card-body">
                 <div class="row">
                     <!-- 假设A -->
-                    <div class="col-md-6 mb-4">
+                    <div class="col-lg-6 mb-4">
                         <div class="card h-100 border-primary">
                             <div class="card-header bg-primary text-white">
                                 <h5 class="mb-0"><i class="fas fa-flask me-2"></i>Hypothesis A</h5>
@@ -108,7 +88,7 @@
                     </div>
 
                     <!-- 假设B -->
-                    <div class="col-md-6 mb-4">
+                    <div class="col-lg-6 mb-4">
                         <div class="card h-100 border-success">
                             <div class="card-header bg-success text-white">
                                 <h5 class="mb-0"><i class="fas fa-flask me-2"></i>Hypothesis B</h5>
@@ -184,25 +164,37 @@
                             <i class="fas fa-lightbulb text-warning me-2"></i>1. Novelty/Originality: Which proposal presents a more surprising, non-obvious, or groundbreaking idea?
                         </label>
                         <div class="rating-scale">
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="novelty_score" value="1" id="novelty1" required>
-                                <label class="form-check-label" for="novelty1">A is much better</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="novelty_score" value="2" id="novelty2">
-                                <label class="form-check-label" for="novelty2">A is slightly better</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="novelty_score" value="3" id="novelty3">
-                                <label class="form-check-label" for="novelty3">Roughly equal</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="novelty_score" value="4" id="novelty4">
-                                <label class="form-check-label" for="novelty4">B is slightly better</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="novelty_score" value="5" id="novelty5">
-                                <label class="form-check-label" for="novelty5">B is much better</label>
+                            <div class="row">
+                                <div class="col-lg-2 col-md-4 col-6 mb-2">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="novelty_score" value="1" id="novelty1" required>
+                                        <label class="form-check-label" for="novelty1">A is much better</label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2 col-md-4 col-6 mb-2">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="novelty_score" value="2" id="novelty2">
+                                        <label class="form-check-label" for="novelty2">A is slightly better</label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2 col-md-4 col-6 mb-2">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="novelty_score" value="3" id="novelty3">
+                                        <label class="form-check-label" for="novelty3">Roughly equal</label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2 col-md-4 col-6 mb-2">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="novelty_score" value="4" id="novelty4">
+                                        <label class="form-check-label" for="novelty4">B is slightly better</label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2 col-md-4 col-6 mb-2">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="novelty_score" value="5" id="novelty5">
+                                        <label class="form-check-label" for="novelty5">B is much better</label>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
